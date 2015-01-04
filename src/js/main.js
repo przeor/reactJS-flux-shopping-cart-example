@@ -2,6 +2,7 @@
 var APP = require('./components/app');
 var React = require('react');
 
-React.renderComponent(
+/* Kamil */
+React.render(
   <APP />,
-  document.getElementById('main'));
+  document.getElementById('main')); 

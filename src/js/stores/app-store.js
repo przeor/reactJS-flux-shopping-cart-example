@@ -6,16 +6,25 @@ var EventEmitter = require('events').EventEmitter;
 var CHANGE_EVENT = "change";
 
 
-var _catalog = [
-    {id:1, title: 'Widget #1', cost: 1},
-    {id:2, title: 'Widget #2', cost: 2},
-    {id:3, title: 'Widget #3', cost: 3}
-  ];
+var _catalog = [];
+
+for(var i=1; i<9; i++) {
+  _catalog.push({
+    'id': 'Widget' + i,
+    'title': 'Widget #'+i,
+    'summary': 'this is an awsome widget'+i,
+    'description': 'Lorem ipsum',
+    'img': '/assets/product.png',
+    'cost': i
+  });
+}
 
 var _cartItems = [];
 
 
 function _removeItem(index){
+  console.log("---********");
+  console.log(index);
   _cartItems[index].inCart = false;
   _cartItems.splice(index, 1);
 }
@@ -33,6 +42,13 @@ function _decreaseItem(index){
   }
 }
 
+function _dropCart(){
+  console.log("-------- przeorski");
+  for(var i=(_cartItems.length-1); i>=0;i--){
+    _removeItem(i);
+  }
+
+}
 
 function _addItem(item){
   if(!item.inCart){
@@ -49,14 +65,25 @@ function _addItem(item){
   }
 }
 
+function _cartTotals(){
+  var qty = 0, total = 0;
+  _cartItems.forEach(function(cartItem){
+    qty+=cartItem.qty;
+    total+=cartItem.qty*cartItem.cost;
+  });
+  return {'qty': qty, 'total': total};
+}
+
+
 
 var AppStore = merge(EventEmitter.prototype, {
   emitChange:function(){
-    this.emit(CHANGE_EVENT)
+    this.emit(CHANGE_EVENT);
   },
 
   addChangeListener:function(callback){
     this.on(CHANGE_EVENT, callback)
+    console.log("przeorski app-store.js"); 
   },
 
   removeChangeListener:function(callback){
@@ -69,6 +96,9 @@ var AppStore = merge(EventEmitter.prototype, {
 
   getCatalog:function(){
     return _catalog
+  },
+  getCartTotals: function(){
+    return _cartTotals();
   },
 
   dispatcherIndex:AppDispatcher.register(function(payload){
@@ -88,6 +118,10 @@ var AppStore = merge(EventEmitter.prototype, {
 
       case AppConstants.DECREASE_ITEM:
         _decreaseItem(payload.action.index);
+        break;
+
+      case AppConstants.DROPCART_ITEMS:
+        _dropCart();
         break;
     }
     AppStore.emitChange();

@@ -25,6 +25,12 @@ var AppActions = {
       actionType: AppConstants.INCREASE_ITEM,
       index: index
     })
+  },
+  dropCart:function(){
+    AppDispatcher.handleViewAction({
+      actionType: AppConstants.DROPCART_ITEMS,
+      what_to_delete: "all"
+    })
   }
 }
 
