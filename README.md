@@ -6,3 +6,5 @@
 * httpster
 
 ### Then go to http://localhost:3333/ (ports 3333 are default for httpster)
+
+![](http://screenshu.com/static/uploads/temporary/d3/54/63/3rljm6.jpg)
